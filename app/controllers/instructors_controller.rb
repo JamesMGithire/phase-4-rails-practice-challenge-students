@@ -1,5 +1,5 @@
 class InstructorsController < ApplicationController
-rescue_from ActiveRecord::RecordInvalid, with: :invalid_record_method
+rescue_from ActiveRecord::RecordInvalid, with: :unprocessable_entity_method
 rescue_from ActiveRecord::RecordNotFound, with: :record_not_found
     def index
         render json: Instructor.all
@@ -34,7 +34,7 @@ rescue_from ActiveRecord::RecordNotFound, with: :record_not_found
         render json: { error: 'Record not found' }, status: :not_found
     end
 
-    def invalid_record_method e
-        render json: {errors: e.errors.messages}
+    def unprocessable_entity_method e
+        render json: {errors: e.errors.messages}, status: :unprocessable_entity
     end
 end
