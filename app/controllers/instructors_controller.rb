@@ -11,19 +11,24 @@ rescue_from ActiveRecord::RecordNotFound, with: :record_not_found
     end
 
     def create
-        instructor = Instructor.new(instructor_params)
+        instructor = Instructor.create!(instructor_params)
         render json: instructor, status: :created
     end
 
     def update
         instructor = find_instructor
-        instructor.update(instructor_params)
+        instructor.update!(instructor_params)
         render json: instructor
     end
 
+    def destroy
+        instructor = find_instructor
+        instructor.destroy
+        render status: :no_content
+    end
     private
     def find_instructor
-            instructor = Instructor.find_by(id: params[:id])
+        Instructor.find_by!(id: params[:id])
     end
 
     def instructor_params
@@ -35,6 +40,6 @@ rescue_from ActiveRecord::RecordNotFound, with: :record_not_found
     end
 
     def unprocessable_entity_method e
-        render json: {errors: e.errors.messages}, status: :unprocessable_entity
+        render json: {errors: e.record.errors}, status: :unprocessable_entity
     end
 end
