@@ -12,7 +12,7 @@ class StudentsController < ApplicationController
     end
 
     def create
-        student = Student.created!(student_params)
+        student = Student.create!(student_params)
         render json: student, status: :created
     end
 
